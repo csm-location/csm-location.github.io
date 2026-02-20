@@ -1,0 +1,21 @@
+{
+  "name": "CSM Mohasin Alam",
+  "short_name": "CSM Hub",
+  "description": "Digital hub for CSM Mohasin Alam",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#010a14",
+  "theme_color": "#00f5ff",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

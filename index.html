@@ -1,435 +1,357 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GPS Tracker — User</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --neon: #00f5ff;
-    --red: #ff2244;
-    --bg: #030810;
-    --card: #0a1628;
-    --border: #0d2845;
-    --text: #c0d8f0;
-    --glow: 0 0 20px rgba(0,245,255,0.4);
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Exo 2', sans-serif;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-  }
-  .grid-bg {
-    position: fixed; inset: 0; z-index: 0;
-    background-image:
-      linear-gradient(rgba(0,245,255,0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0,245,255,0.04) 1px, transparent 1px);
-    background-size: 40px 40px;
-    animation: gridMove 20s linear infinite;
-  }
-  @keyframes gridMove { from { background-position: 0 0; } to { background-position: 40px 40px; } }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CSM Mohasin Alam</title>
+  <link rel="manifest" href="manifest.json" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cyan: #00f5ff;
+      --blue: #0047ff;
+      --dark: #010a14;
+      --mid: #020d1f;
+      --glow: rgba(0,245,255,0.15);
+      --border: rgba(0,245,255,0.3);
+    }
 
-  .container {
-    position: relative; z-index: 1;
-    width: 90%; max-width: 480px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 40px;
-    box-shadow: 0 0 60px rgba(0,245,255,0.08), inset 0 1px 0 rgba(0,245,255,0.1);
-  }
-  .logo {
-    text-align: center;
-    margin-bottom: 32px;
-  }
-  .logo h1 {
-    font-family: 'Orbitron', monospace;
-    font-size: 1.8rem;
-    font-weight: 900;
-    color: var(--neon);
-    text-shadow: var(--glow);
-    letter-spacing: 3px;
-  }
-  .logo p { font-size: 0.8rem; color: #4a7a9b; letter-spacing: 4px; text-transform: uppercase; margin-top: 4px; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-  .pulse-ring {
-    width: 100px; height: 100px;
-    margin: 0 auto 28px;
-    position: relative;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .pulse-ring::before, .pulse-ring::after {
-    content: '';
-    position: absolute; inset: 0;
-    border-radius: 50%;
-    border: 2px solid var(--neon);
-    animation: pulseRing 2s ease-out infinite;
-  }
-  .pulse-ring::after { animation-delay: 1s; }
-  @keyframes pulseRing {
-    0% { transform: scale(0.6); opacity: 1; }
-    100% { transform: scale(1.4); opacity: 0; }
-  }
-  .pulse-ring svg { width: 40px; height: 40px; fill: var(--neon); filter: drop-shadow(var(--glow)); position: relative; z-index: 1; }
+    body {
+      background: var(--dark);
+      color: #e0f7fa;
+      font-family: 'Rajdhani', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
 
-  .status-grid {
-    display: grid; grid-template-columns: 1fr 1fr;
-    gap: 12px; margin-bottom: 24px;
-  }
-  .stat {
-    background: rgba(0,245,255,0.04);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 14px;
-    transition: border-color 0.3s;
-  }
-  .stat:hover { border-color: rgba(0,245,255,0.3); }
-  .stat-label { font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; color: #4a7a9b; margin-bottom: 6px; }
-  .stat-value { font-family: 'Orbitron', monospace; font-size: 1rem; color: var(--neon); font-weight: 700; }
-  .stat-value.offline { color: #ff6644; }
+    /* Animated grid background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,245,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,245,255,0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+      animation: gridMove 20s linear infinite;
+      z-index: 0;
+    }
 
-  .status-bar {
-    display: flex; align-items: center; gap: 10px;
-    padding: 12px 16px;
-    background: rgba(0,245,255,0.05);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    margin-bottom: 24px;
-    font-size: 0.82rem;
-  }
-  .dot {
-    width: 8px; height: 8px; border-radius: 50%;
-    background: #444; transition: background 0.3s;
-  }
-  .dot.active { background: #00ff88; box-shadow: 0 0 8px #00ff88; animation: blink 1s infinite; }
-  .dot.error { background: var(--red); box-shadow: 0 0 8px var(--red); }
-  @keyframes blink { 50% { opacity: 0.3; } }
+    @keyframes gridMove {
+      0% { background-position: 0 0; }
+      100% { background-position: 40px 40px; }
+    }
 
-  #statusText { color: var(--text); flex: 1; }
+    /* Scanline overlay */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.15) 2px,
+        rgba(0,0,0,0.15) 4px
+      );
+      pointer-events: none;
+      z-index: 999;
+    }
 
-  .sos-btn {
-    width: 100%;
-    padding: 18px;
-    background: linear-gradient(135deg, #ff0022, #cc0011);
-    border: 2px solid #ff2244;
-    border-radius: 12px;
-    color: white;
-    font-family: 'Orbitron', monospace;
-    font-size: 1.1rem;
-    font-weight: 700;
-    letter-spacing: 4px;
-    cursor: pointer;
-    transition: all 0.2s;
-    box-shadow: 0 0 30px rgba(255,34,68,0.4);
-    position: relative;
-    overflow: hidden;
-  }
-  .sos-btn:hover { transform: translateY(-2px); box-shadow: 0 0 50px rgba(255,34,68,0.7); }
-  .sos-btn:active { transform: scale(0.97); }
-  .sos-btn.triggered {
-    animation: sosPulse 0.5s infinite;
-  }
-  @keyframes sosPulse {
-    0%, 100% { box-shadow: 0 0 30px rgba(255,34,68,0.4); }
-    50% { box-shadow: 0 0 80px rgba(255,34,68,1); background: #ff0000; }
-  }
-  .sos-btn::before {
-    content: ''; position: absolute; inset: 0;
-    background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
-    transform: translateX(-100%);
-    transition: transform 0.5s;
-  }
-  .sos-btn:hover::before { transform: translateX(100%); }
+    /* Glowing orbs */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.12;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .orb-1 {
+      width: 400px; height: 400px;
+      background: var(--cyan);
+      top: -100px; left: -100px;
+      animation: orbFloat 10s ease-in-out infinite alternate;
+    }
+    .orb-2 {
+      width: 300px; height: 300px;
+      background: var(--blue);
+      bottom: -80px; right: -80px;
+      animation: orbFloat 14s ease-in-out infinite alternate-reverse;
+    }
+    @keyframes orbFloat {
+      from { transform: translate(0,0); }
+      to { transform: translate(40px, 40px); }
+    }
 
-  .log {
-    margin-top: 20px;
-    max-height: 120px;
-    overflow-y: auto;
-    font-size: 0.72rem;
-    font-family: monospace;
-    color: #3a6a8a;
-    line-height: 1.8;
-  }
-  .log::-webkit-scrollbar { width: 4px; }
-  .log::-webkit-scrollbar-track { background: transparent; }
-  .log::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-  .log-entry { border-bottom: 1px solid rgba(0,245,255,0.05); padding: 2px 0; }
-  .log-entry.info { color: #00f5ff66; }
-  .log-entry.success { color: #00ff8866; }
-  .log-entry.error { color: #ff224466; }
-</style>
+    .container {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 2rem;
+      max-width: 600px;
+      width: 100%;
+    }
+
+    /* Header section */
+    .badge {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.4em;
+      color: var(--cyan);
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
+      opacity: 0;
+      animation: fadeSlideDown 0.8s ease 0.3s forwards;
+    }
+
+    .title {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(1.8rem, 6vw, 3rem);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.4rem;
+      opacity: 0;
+      animation: fadeSlideDown 0.8s ease 0.5s forwards;
+    }
+
+    .title span.csm {
+      color: var(--cyan);
+      text-shadow: 0 0 20px var(--cyan), 0 0 60px rgba(0,245,255,0.4);
+    }
+
+    .subtitle {
+      font-size: 1rem;
+      font-weight: 300;
+      letter-spacing: 0.2em;
+      color: rgba(224,247,250,0.5);
+      margin-bottom: 3rem;
+      opacity: 0;
+      animation: fadeSlideDown 0.8s ease 0.7s forwards;
+    }
+
+    /* Divider line */
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+      margin-bottom: 3rem;
+      opacity: 0;
+      animation: fadeSlideDown 0.8s ease 0.9s forwards;
+    }
+
+    /* Buttons */
+    .buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      opacity: 0;
+      animation: fadeSlideUp 0.8s ease 1.1s forwards;
+    }
+
+    .btn {
+      display: block;
+      position: relative;
+      padding: 1.2rem 2.5rem;
+      font-family: 'Orbitron', monospace;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      color: var(--cyan);
+      text-decoration: none;
+      background: transparent;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--glow);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .btn::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 0; height: 2px;
+      background: var(--cyan);
+      box-shadow: 0 0 10px var(--cyan);
+      transition: width 0.4s ease;
+    }
+
+    .btn:hover::before { opacity: 1; }
+    .btn:hover::after { width: 100%; }
+
+    .btn:hover {
+      color: #fff;
+      border-color: var(--cyan);
+      box-shadow: 0 0 25px rgba(0,245,255,0.2), inset 0 0 25px rgba(0,245,255,0.05);
+      transform: translateY(-2px);
+    }
+
+    .btn:active { transform: translateY(0) scale(0.98); }
+
+    .btn-label {
+      position: relative;
+      z-index: 1;
+    }
+
+    .btn-sub {
+      display: block;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 300;
+      letter-spacing: 0.3em;
+      color: rgba(0,245,255,0.5);
+      margin-top: 4px;
+      transition: color 0.3s;
+    }
+    .btn:hover .btn-sub { color: rgba(255,255,255,0.6); }
+
+    /* Corner decorations */
+    .corners {
+      position: absolute;
+      inset: -20px;
+      pointer-events: none;
+    }
+    .corner {
+      position: absolute;
+      width: 20px; height: 20px;
+      border-color: rgba(0,245,255,0.4);
+      border-style: solid;
+    }
+    .corner-tl { top: 0; left: 0; border-width: 2px 0 0 2px; }
+    .corner-tr { top: 0; right: 0; border-width: 2px 2px 0 0; }
+    .corner-bl { bottom: 0; left: 0; border-width: 0 0 2px 2px; }
+    .corner-br { bottom: 0; right: 0; border-width: 0 2px 2px 0; }
+
+    /* Status bar */
+    .status {
+      margin-top: 3rem;
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      color: rgba(0,245,255,0.3);
+      opacity: 0;
+      animation: fadeSlideUp 0.8s ease 1.4s forwards;
+    }
+
+    .status-dot {
+      display: inline-block;
+      width: 6px; height: 6px;
+      background: var(--cyan);
+      border-radius: 50%;
+      margin-right: 8px;
+      box-shadow: 0 0 8px var(--cyan);
+      animation: blink 2s ease infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.2; }
+    }
+
+    @keyframes fadeSlideDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Offline indicator */
+    #offline-msg {
+      display: none;
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      background: rgba(255,80,80,0.1);
+      border: 1px solid rgba(255,80,80,0.3);
+      color: rgba(255,150,150,0.8);
+      font-family: 'Orbitron', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      padding: 0.5rem 1rem;
+      z-index: 1000;
+      clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    }
+    #offline-msg.show { display: block; }
+  </style>
 </head>
 <body>
-<div class="grid-bg"></div>
-<div class="container">
-  <div class="logo">
-    <h1>⬡ TRACKR</h1>
-    <p>Real-time Location System</p>
+
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div id="offline-msg">● OFFLINE MODE</div>
+
+  <div class="container">
+    <div class="corners">
+      <div class="corner corner-tl"></div>
+      <div class="corner corner-tr"></div>
+      <div class="corner corner-bl"></div>
+      <div class="corner corner-br"></div>
+    </div>
+
+    <div class="badge">∴ Digital Hub ∴</div>
+
+    <h1 class="title">
+      <span class="csm">CSM</span><br/>Mohasin Alam
+    </h1>
+    <p class="subtitle">SYSTEM ACCESS PORTAL</p>
+
+    <div class="divider"></div>
+
+    <div class="buttons">
+      <a class="btn" href="https://csm-note.github.io" target="_blank" rel="noopener">
+        <span class="btn-label">
+          CSM NOTE
+          <span class="btn-sub">csm-note.github.io</span>
+        </span>
+      </a>
+      <a class="btn" href="https://csm-storage.github.io" target="_blank" rel="noopener">
+        <span class="btn-label">
+          CSM STORAGE
+          <span class="btn-sub">csm-storage.github.io</span>
+        </span>
+      </a>
+    </div>
+
+    <div class="status">
+      <span class="status-dot"></span>SYSTEM ONLINE — ALL NODES ACTIVE
+    </div>
   </div>
 
-  <div class="pulse-ring">
-    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-    </svg>
-  </div>
-
-  <div class="status-grid">
-    <div class="stat">
-      <div class="stat-label">Speed</div>
-      <div class="stat-value" id="speedVal">-- km/h</div>
-    </div>
-    <div class="stat">
-      <div class="stat-label">Status</div>
-      <div class="stat-value" id="motionVal">--</div>
-    </div>
-    <div class="stat">
-      <div class="stat-label">Battery</div>
-      <div class="stat-value" id="battVal">--%</div>
-    </div>
-    <div class="stat">
-      <div class="stat-label">Network</div>
-      <div class="stat-value" id="netVal">--</div>
-    </div>
-  </div>
-
-  <div class="status-bar">
-    <div class="dot" id="statusDot"></div>
-    <span id="statusText">Initializing system...</span>
-  </div>
-
-  <button class="sos-btn" id="sosBtn" onclick="triggerSOS()">
-    🚨 SOS EMERGENCY
-  </button>
-
-  <div class="log" id="logContainer"></div>
-</div>
-
-<!-- Firebase SDK -->
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getDatabase, ref, set, onDisconnect, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDMtnUi5BScy_E_IhgawOYh72vgOfu-3Dw",
-  authDomain: "location-f2550.firebaseapp.com",
-  databaseURL: "https://location-f2550-default-rtdb.firebaseio.com",
-  projectId: "location-f2550",
-  storageBucket: "location-f2550.firebasestorage.app",
-  messagingSenderId: "826880833493",
-  appId: "1:826880833493:web:0cc4e603b4315ba9712f5c"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-
-// Generate or retrieve user ID
-let userId = localStorage.getItem('trackr_uid');
-if (!userId) {
-  userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
-  localStorage.setItem('trackr_uid', userId);
-}
-
-const userRef = ref(db, `users/${userId}`);
-const log = (msg, type = 'info') => {
-  const el = document.createElement('div');
-  el.className = `log-entry ${type}`;
-  el.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
-  const c = document.getElementById('logContainer');
-  c.prepend(el);
-  if (c.children.length > 20) c.removeChild(c.lastChild);
-};
-
-const setStatus = (msg, state = '') => {
-  document.getElementById('statusText').textContent = msg;
-  const dot = document.getElementById('statusDot');
-  dot.className = 'dot' + (state ? ' ' + state : '');
-};
-
-// Device info
-const getDeviceInfo = () => {
-  const ua = navigator.userAgent;
-  let model = 'Unknown Device';
-  if (/iPhone/.test(ua)) model = 'iPhone';
-  else if (/Android/.test(ua)) {
-    const m = ua.match(/\(([^;]+);/);
-    if (m) model = m[1].trim();
-  } else if (/Windows/.test(ua)) model = 'Windows PC';
-  else if (/Mac/.test(ua)) model = 'Mac';
-  return { model, ua: ua.substring(0, 100) };
-};
-
-// IP & ISP
-const getIPInfo = async () => {
-  try {
-    const r = await fetch('https://ipapi.co/json/');
-    const d = await r.json();
-    return { ip: d.ip, isp: d.org || 'Unknown', city: d.city, country: d.country_name };
-  } catch {
-    return { ip: 'Unknown', isp: 'Unknown', city: '', country: '' };
-  }
-};
-
-// Network type
-const getNetworkType = () => {
-  const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-  if (!conn) return 'Unknown';
-  const t = conn.effectiveType;
-  if (conn.type === 'wifi') return 'WiFi';
-  return t ? t.toUpperCase() : 'Unknown';
-};
-
-// Battery
-const getBattery = async () => {
-  try {
-    const b = await navigator.getBattery();
-    document.getElementById('battVal').textContent = Math.round(b.level * 100) + '%';
-    document.getElementById('battVal').style.color = b.charging ? '#00ff88' : (b.level < 0.2 ? '#ff2244' : '#00f5ff');
-    b.addEventListener('levelchange', () => {
-      document.getElementById('battVal').textContent = Math.round(b.level * 100) + '%';
-    });
-    return { level: Math.round(b.level * 100), charging: b.charging };
-  } catch { return { level: -1, charging: false }; }
-};
-
-// Light sensor
-const getLightLevel = () => {
-  return new Promise(resolve => {
-    if ('AmbientLightSensor' in window) {
-      try {
-        const sensor = new AmbientLightSensor();
-        sensor.addEventListener('reading', () => { resolve(sensor.illuminance); sensor.stop(); });
-        sensor.start();
-        setTimeout(() => resolve(null), 2000);
-      } catch { resolve(null); }
-    } else resolve(null);
-  });
-};
-
-// Motion detection
-const detectMotion = (speed) => {
-  if (speed === null || speed === undefined) return 'Unknown';
-  if (speed < 1) return '🧍 Stationary';
-  if (speed < 7) return '🚶 Walking';
-  if (speed < 30) return '🚴 Cycling';
-  return '🚗 Driving';
-};
-
-// Setup onDisconnect
-onDisconnect(userRef).update({
-  online: false,
-  lastSeen: serverTimestamp()
-});
-
-// Main tracking
-const startTracking = async () => {
-  setStatus('Requesting location permission...', '');
-  log('Starting GPS system...', 'info');
-
-  const ipInfo = await getIPInfo();
-  const device = getDeviceInfo();
-  const battery = await getBattery();
-  const netType = getNetworkType();
-
-  document.getElementById('netVal').textContent = netType;
-
-  log(`IP: ${ipInfo.ip} | ISP: ${ipInfo.isp}`, 'success');
-  log(`Device: ${device.model}`, 'success');
-
-  if (!navigator.geolocation) {
-    setStatus('Geolocation not supported!', 'error');
-    return;
-  }
-
-  let prevCoords = null;
-  let pathCoords = [];
-
-  navigator.geolocation.watchPosition(
-    async (pos) => {
-      const { latitude, longitude, accuracy, speed, heading, altitude } = pos.coords;
-      const speedKmh = speed ? Math.round(speed * 3.6) : 0;
-      const motion = detectMotion(speedKmh);
-      const light = await getLightLevel();
-      const bat = await getBattery();
-
-      document.getElementById('speedVal').textContent = speedKmh + ' km/h';
-      document.getElementById('motionVal').textContent = motion;
-      setStatus(`Transmitting — ${latitude.toFixed(5)}, ${longitude.toFixed(5)}`, 'active');
-
-      pathCoords.push([latitude, longitude]);
-      if (pathCoords.length > 200) pathCoords.shift();
-
-      const payload = {
-        uid: userId,
-        lat: latitude,
-        lng: longitude,
-        accuracy,
-        speed: speedKmh,
-        heading: heading || 0,
-        altitude: altitude || 0,
-        motion,
-        battery: bat,
-        network: getNetworkType(),
-        ip: ipInfo.ip,
-        isp: ipInfo.isp,
-        city: ipInfo.city,
-        country: ipInfo.country,
-        device: device.model,
-        lightLevel: light,
-        path: pathCoords.slice(-50),
-        sos: false,
-        online: true,
-        timestamp: serverTimestamp(),
-        name: localStorage.getItem('trackr_name') || 'User-' + userId.slice(-4)
-      };
-
-      await set(userRef, payload);
-      log(`Location sent: ${speedKmh}km/h | ${motion}`, 'success');
-    },
-    (err) => {
-      setStatus('GPS Error: ' + err.message, 'error');
-      log('GPS Error: ' + err.message, 'error');
-    },
-    {
-      enableHighAccuracy: true,
-      maximumAge: 0,
-      timeout: 5000
+  <script>
+    // Register Service Worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js')
+        .then(reg => console.log('SW registered:', reg.scope))
+        .catch(err => console.log('SW error:', err));
     }
-  );
-};
 
-// SOS
-window.triggerSOS = async () => {
-  const btn = document.getElementById('sosBtn');
-  btn.classList.add('triggered');
-  btn.textContent = '🚨 SOS ACTIVE — HELP SENT!';
-  log('SOS TRIGGERED!', 'error');
-  await set(ref(db, `users/${userId}/sos`), true);
-  await set(ref(db, `sos_alerts/${userId}`), {
-    uid: userId,
-    timestamp: serverTimestamp(),
-    active: true
-  });
-  setTimeout(() => {
-    btn.classList.remove('triggered');
-    btn.textContent = '🚨 SOS EMERGENCY';
-  }, 10000);
-};
-
-// Prompt for name
-let name = localStorage.getItem('trackr_name');
-if (!name) {
-  name = prompt('Enter your name for tracking:', 'Anonymous');
-  if (name) localStorage.setItem('trackr_name', name);
-}
-
-startTracking();
-</script>
+    // Offline/Online detection
+    const offlineMsg = document.getElementById('offline-msg');
+    function updateOnlineStatus() {
+      offlineMsg.classList.toggle('show', !navigator.onLine);
+    }
+    window.addEventListener('online', updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
+    updateOnlineStatus();
+  </script>
 </body>
 </html>
