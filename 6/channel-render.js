@@ -95,14 +95,12 @@ window.renderCategory = function (category, containerId) {
     const hasActiveGrid =
       document.querySelector(".channel-grid.active");
 
-    // 👉 যদি কোনো grid active না থাকে
+    // 👉 যদি কোনো grid active না থাকে শুধু তখনই এটা active করো
     if (!hasActiveGrid) {
       grid.classList.add("active");
     }
 
-    // 👉 Desktop browsers sometimes need force
-    if (window.innerWidth >= 769) {
-      grid.style.display = "grid";
-    }
+    // ❌ REMOVED: grid.style.display = "grid" for all grids on desktop
+    // This was causing ALL grids to show at once on desktop
   });
 };
